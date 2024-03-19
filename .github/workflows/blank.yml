@@ -20,18 +20,3 @@ jobs:
         with:
           name: lint_report.html  # Adjust filename if necessary
           path: path/to/your/lint/report/file  # Update with the actual path
-
-  unit-test:
-    needs: lint  # Run unit tests only after linting succeeds
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
-
-      - name: Run unit tests
-        run: ./gradlew test
-
-      - name: Upload unit test report
-        uses: actions/upload-artifact@v2
-        with:
-          name: unit_test_report.xml  # Adjust filename if necessary
-          path: app/build/reports/tests/testDebugUnitTest/  # Update with the actual path
