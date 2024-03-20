@@ -1,4 +1,4 @@
-name: CI
+name: CI Pipeline
 
 on:
   push:
@@ -7,16 +7,19 @@ on:
     branches: [ master ]
 
 jobs:
-  lint:
-    runs-on: ubuntu-latest
+ build:
+   runs-on: ubuntu-latest  # Run on Ubuntu virtual machines
+
     steps:
-      - uses: actions/checkout@v2
-
-      - name: Run linting
-        run: uses: actions/eslint@v3
-
-      - name: Upload lint report (if applicable)
-        uses: actions/upload-artifact@v2
+      - uses: actions/checkout@v3  # Checkout code from GitHub
+      - name: Set up JDK 1.8  # Install Java Development Kit
+        uses: actions/setup-java@v3
         with:
-          name: lint_report.html  # Adjust filename if necessary
-          path: path/to/your/lint/report/file  # Update with the actual path
+          java-version: '1.8'
+      - name: Cache Gradle packages  # Cache Gradle dependencies
+        uses: actions/cache@v3
+        with:
+          path: ~/.gradle/caches
+          key: ${{ runner.os }}-gradle-${{ hashFiles('build.gradle') }}
+      - name: Run gradle build  # Build the Android project
+        run: ./gradlew build
